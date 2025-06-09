@@ -2,6 +2,16 @@
 
 Este projeto coleta, organiza e analisa dados de álbuns musicais com foco em visualização interativa e estatísticas por gênero, artista e década.
 
+## 🧠 O que você aprende neste projeto
+
+- Leitura e escrita de arquivos JSON
+- Estruturação de CRUD em Python
+- Organização modular de código
+- Análise de dados com Pandas
+- Visualização interativa com Plotly
+- Boas práticas com funções e tipagem
+- Estrutura profissional de projetos de dados
+
 ## 📌 Tecnologias utilizadas
 
 - Python 3.11
@@ -53,10 +63,9 @@ Abra o notebooks/exploratory_analysis.ipynb
 
 ## 🚀 Próximos passos
 
-- Migração para SQLite
-
-- Dashboard com Streamlit
-
-- Integração com API do Spotify
+- 🔄 Migrar de JSON para SQLite
+- 📊 Criar análises com SQL e Pandas
+- 🌐 Integrar com API do Spotify
+- 🖼️ Criar dashboard com Streamlit
 
 Feito por Filipe Madeira – 2025
