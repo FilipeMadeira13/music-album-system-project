@@ -44,3 +44,19 @@ cd music-album-system-project
 poetry install --no-root
 python main.py
 ```
+
+## 📈 Para análise via notebook
+
+```
+Abra o notebooks/exploratory_analysis.ipynb
+```
+
+## 🚀 Próximos passos
+
+- Migração para SQLite
+
+- Dashboard com Streamlit
+
+- Integração com API do Spotify
+
+Feito por Filipe Madeira – 2025
