@@ -3,8 +3,8 @@ import os
 
 import pandas as pd
 
-from sql_analysis import albums_by_decade, albums_by_genre, load_dataframe
 from src.crud import FILE_PATH
+from src.sql_analysis import albums_by_decade, albums_by_genre, load_dataframe
 
 
 def load_data_to_dataframe() -> pd.DataFrame:

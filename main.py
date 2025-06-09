@@ -92,7 +92,7 @@ def main():
         elif option == "5":
             df = analysis.load_data_to_dataframe()
             if not df.empty:
-                analysis.basic_statistics(df)
+                analysis.basic_statistics_sql()
         elif option == "6":
             create_table()
             migrate_json_data_to_sqlite()
