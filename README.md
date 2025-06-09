@@ -26,16 +26,6 @@ main.py # Aplicação interativa em terminal
 - Estatísticas descritivas com Pandas
 - Visualização com Plotly (gênero, artista, ano, década)
 
-## 📷 Exemplos
-
-### Lançamentos por Década
-
-![plot](img/plot_decada.png)
-
-### Álbuns por Gênero
-
-![plot](img/plot_genero.png)
-
 ## 🛠️ Como executar
 
 ```bash
