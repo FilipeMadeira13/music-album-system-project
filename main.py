@@ -2,6 +2,7 @@ from datetime import datetime
 
 import src.analysis as analysis
 import src.crud as ms
+from src.db_manager import create_table, migrate_json_data_to_sqlite
 
 
 def show_menu():
@@ -15,7 +16,8 @@ def show_menu():
     3 - Filtrar álbuns
     4 - Remover álbum
     5 - Analisar dados
-    6 - Sair
+    6 - Migrar para SQlite
+    7 - Sair
 """
     )
     return input("Escolha o número da opção acima: ").strip()
@@ -92,6 +94,9 @@ def main():
             if not df.empty:
                 analysis.basic_statistics(df)
         elif option == "6":
+            create_table()
+            migrate_json_data_to_sqlite()
+        elif option == "7":
             print("🎼 Você saiu do sistema de músicas.")
             break
         else:
