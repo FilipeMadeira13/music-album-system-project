@@ -1,6 +1,11 @@
 import pandas as pd
 
-from src.sql_analysis import albums_by_decade, albums_by_genre, load_dataframe
+from src.sql_analysis import (
+    albums_by_artist,
+    albums_by_decade,
+    albums_by_genre,
+    load_dataframe,
+)
 
 
 def load_data_to_dataframe() -> pd.DataFrame:
@@ -13,6 +18,9 @@ def basic_statistics_sql() -> None:
 
     print("🎧 Álbuns por Gênero:")
     print(albums_by_genre(), "\n")
+
+    print("🎤 Álbuns por Artista:")
+    print(albums_by_artist(), "\n")
 
     print("📅 Álbuns por Década:")
     print(albums_by_decade(), "\n")
