@@ -14,6 +14,27 @@ load_dotenv()
 
 st.title("🎵 Análise de Álbuns Musicais")
 
+st.subheader("🔍 Buscar Álbum no Spotify")
+
+album_name = st.text_input("Digite o nome do álbum: ").title().strip()
+artist = st.text_input("Digite o nome do artista: ").title().strip()
+
+if album_name and artist:
+    album_sp = search_album_by_name(album_name, artist)
+
+    if album_sp:
+        st.image(album_sp["imagem"], width=250)
+        st.markdown(
+            f"[Ouvir no Spotify]({album_sp['spotify_url']})", unsafe_allow_html=True
+        )
+
+        st.markdown(f"**Artista**: {album_sp['artista']}")
+        st.markdown(f"**Data de Lançamento**: {album_sp['lancamento']}")
+        st.markdown(f"**Total de Faixas**: {album_sp['total_faixas']}")
+        st.markdown(f"**Popularidade**: {album_sp['popularidade']}")
+    else:
+        st.warning("Nenhum resultado encontado para esse álbum.")
+
 st.subheader("Álbuns por Gênero")
 df_genre = albums_by_genre()
 st.bar_chart(df_genre.set_index("genero")["quantidade"])
@@ -37,23 +58,3 @@ if start <= end:
     st.dataframe(df_range)
 else:
     st.warning("O ano final deve ser maior ou igual ao ano inicial.")
-
-st.subheader("🔍 Buscar Álbum no Spotify")
-
-album_name = st.text_input("Digite o nome do álbum: ").title().strip()
-
-if album_name:
-    album_sp = search_album_by_name(album_name)
-
-    if album_sp:
-        st.image(album_sp["imagem"], width=250)
-        st.markdown(
-            f"[Ouvir no Spotify]({album_sp['spotify_url']})", unsafe_allow_html=True
-        )
-
-        st.markdown(f"**Artista**: {album_sp['artista']}")
-        st.markdown(f"**Data de Lançamento**: {album_sp['lancamento']}")
-        st.markdown(f"**Total de Faixas**: {album_sp['total_faixas']}")
-        st.markdown(f"**Popularidade**: {album_sp['popularidade']}")
-    else:
-        st.warning("Nenhum resultado encontado para esse álbum.")

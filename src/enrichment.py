@@ -44,7 +44,7 @@ def enrich_album_data(name: str, artist: str) -> None:
 
         album_id = result[0]
         print(f"🔍 Buscando informações no Spotify para: {name} de {artist}")
-        spotify_data = search_album_by_name(name)
+        spotify_data = search_album_by_name(name, artist)
 
         if not spotify_data:
             print(f"⚠️ Nenhuma informação encontrada na API.")

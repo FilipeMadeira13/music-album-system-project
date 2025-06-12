@@ -1,71 +1,115 @@
-# 🎵 Projeto de Análise de Álbuns Musicais
+# 🎵 Music Album System Project
 
-Este projeto coleta, organiza e analisa dados de álbuns musicais com foco em visualização interativa e estatísticas por gênero, artista e década.
+Sistema completo de análise de álbuns musicais com SQLite, Streamlit e integração com a API do Spotify.
 
-## 🧠 O que você aprende neste projeto
+---
 
-- Leitura e escrita de arquivos JSON
-- Estruturação de CRUD em Python
-- Organização modular de código
-- Análise de dados com Pandas
-- Visualização interativa com Plotly
-- Boas práticas com funções e tipagem
-- Estrutura profissional de projetos de dados
+## 📊 Visão Geral
 
-## 📌 Tecnologias utilizadas
+Este projeto permite:
 
-- Python 3.11
+- Cadastro e gerenciamento de álbuns (nome, artista, gênero, ano)
+- Armazenamento em banco de dados SQLite
+- Análises e visualizações por gênero, artista, ano e década
+- Integração com a API do Spotify para enriquecer os dados
+- Interface interativa via terminal e dashboard com Streamlit
+
+---
+
+## 🌐 Tecnologias Utilizadas
+
+- Python 3.11+
+- SQLite3
+- Streamlit
+- Spotipy (API Spotify)
 - Pandas
 - Plotly
-- JSON (armazenamento)
-- Jupyter Notebook
+- dotenv
 
-## 🧱 Estrutura do Projeto
+---
 
-```
-src/ # Módulos Python (CRUD, análise, visualização)
-data/ # Arquivo albums.json
-notebooks/ # Análises exploratórias
-main.py # Aplicação interativa em terminal
-```
+## ⚖️ Funcionalidades
 
-## 📊 Funcionalidades
+### Terminal (main.py)
 
-- Adicionar, listar, filtrar e remover álbuns
-- Armazenamento em JSON
-- Estatísticas descritivas com Pandas
-- Visualização com Plotly (gênero, artista, ano, década)
+- [x] Adicionar, listar, remover e filtrar álbuns
+- [x] Atualizar um álbum com dados reais da API do Spotify
+- [x] Validar duplicidade por nome **e artista**
 
-## 📷 Exemplos
+### Dashboard (app.py)
 
-### Lançamentos por Década
+- [x] Gráficos por gênero, artista e década
+- [x] Filtro interativo por intervalo de anos
+- [x] Busca de álbuns com imagem e link direto para o Spotify
 
-![plot](img/plot_decada.png)
+---
 
-### Álbuns por Gênero
+## ⚖️ Como Usar o Projeto
 
-![plot](img/plot_genero.png)
-
-## 🛠️ Como executar
+### 1. Clone o repositório
 
 ```bash
-git clone https://github.com/FilipeMadeira13/music-album-system-project.git
+git clone https://github.com/seu-usuario/music-album-system-project.git
 cd music-album-system-project
+```
+
+### 2. Instale as dependências
+
+```bash
 poetry install --no-root
+```
+
+### 3. Configure as variáveis de ambiente
+
+Crie um arquivo `.env` com:
+
+```env
+SPOTIPY_CLIENT_ID=xxxxxx
+SPOTIPY_CLIENT_SECRET=yyyyyy
+```
+
+### 4. Execute o terminal
+
+```bash
 python main.py
 ```
 
-## 📈 Para análise via notebook
+### 5. Rode o dashboard Streamlit
 
+```bash
+streamlit run app.py
 ```
-Abra o notebooks/exploratory_analysis.ipynb
-```
 
-## 🚀 Próximos passos
+---
 
-- 🔄 Migrar de JSON para SQLite
-- 📊 Criar análises com SQL e Pandas
-- 🌐 Integrar com API do Spotify
-- 🖼️ Criar dashboard com Streamlit
+## 📈 Exemplo de Análise no Dashboard
 
-Feito por Filipe Madeira – 2025
+![dashboard_genero](img/plot_genero.png)
+![dashboard_decada](img/plot_decada.png)
+![dashboard_spotify](img/exemplo_album_spotify.png)
+
+---
+
+## 🚀 Roadmap Futuro
+
+- [ ] Marcar álbuns favoritos
+- [ ] Exportar relatórios em CSV
+- [ ] Adicionar playlist automática com base nos álbuns favoritos
+
+---
+
+## 🎓 Autor
+
+**Filipe Madeira**
+
+---
+
+## 🔗 Contribuições
+
+Pull requests são bem-vindos. Para mudanças maiores, abra uma issue primeiro.
+
+---
+
+## ✅ Licença
+
+Este projeto está licenciado sob a MIT License.
