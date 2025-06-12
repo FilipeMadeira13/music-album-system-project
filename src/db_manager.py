@@ -8,7 +8,7 @@ DB_PATH = os.path.abspath(
 
 
 def create_table() -> None:
-    with db_connection as conn:
+    with db_connection() as conn:
         cursor = conn.cursor()
 
         cursor.execute(
@@ -24,6 +24,22 @@ def create_table() -> None:
         )
         conn.commit()
         print("✅ Tabela 'albums' criada ou já existente.")
+
+
+def add_favorito_column() -> None:
+    with db_connection() as conn:
+        cursor = conn.cursor()
+
+        try:
+            cursor.execute(
+                """
+            ALTER TABLE albums
+            ADD COLUMN favorito BOOLEAN DEFAULT 0;
+            """
+            )
+            print("✅ Coluna 'favorito' adicionada à tabela 'albums'.")
+        except sqlite3.OperationalError:
+            print("⚠️ Coluna 'favorito' já existe na tabela 'albums'.")
 
 
 @contextmanager
