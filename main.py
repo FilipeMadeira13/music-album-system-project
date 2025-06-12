@@ -16,7 +16,8 @@ def show_menu():
     4 - Remover álbum
     5 - Analisar dados
     6 - Atualizar álbum com dados do Spotify
-    7 - Sair
+    7 - Marcar álbum como favorito
+    8 - Sair
 """
     )
     return input("Escolha o número da opção acima: ").strip()
@@ -73,17 +74,24 @@ def handle_filter_albums():
 
 def handle_remove_album():
     name = input("Digite o álbum que deseja excluir: ").strip().lower()
+    artist = input("Digite o artista do álbum: ").strip().lower()
+    if not name or not artist:
+        print("⚠️ Nome do álbum e artista não podem ser vazios.")
+        return
     confirmation = (
-        input(f"Tem certeza que deseja excluir {name}? (s/n): ").strip().lower() == "s"
+        input(f"Tem certeza que deseja excluir {name} do artista {artist}? (s/n): ")
+        .strip()
+        .lower()
+        == "s"
     )
     if confirmation:
-        album = sc.remove_album_by_name(name)
+        album = sc.remove_album_by_name(name, artist)
         if album:
             print("✅ Álbum excluído com sucesso.")
         else:
             print("❌ Álbum não encontrado!")
     else:
-        print("❌ Exclusão de álbum cancelado!")
+        print("❌ Exclusão de álbum cancelada!")
 
 
 def handle_enrich_album():
@@ -94,6 +102,17 @@ def handle_enrich_album():
         enrich_album_data(name, artist)
     else:
         print("⚠️ Nome do álbum e artista não podem ser vazios.")
+
+
+def handle_toggle_favorite():
+    name = input("Nome do álbum: ").strip().title()
+    artist = input("Artista: ").strip().title()
+    is_fav = input("Marcar como favorito? (s/n): ").strip().lower() == "s"
+    updated = sc.update_album_favorite(name, artist, is_fav)
+    if updated:
+        print("✅ Álbum atualizado com sucesso.")
+    else:
+        print("❌ Álbum não encontrado ou não atualizado.")
 
 
 def main():
@@ -114,6 +133,8 @@ def main():
         elif option == "6":
             handle_enrich_album()
         elif option == "7":
+            handle_toggle_favorite()
+        elif option == "8":
             print("🎼 Você saiu do sistema de músicas.")
             break
         else:

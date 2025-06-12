@@ -1,7 +1,4 @@
-import os
-import sqlite3
-
-from src.db_manager import DB_PATH, db_connection
+from src.db_manager import db_connection
 
 
 def add_album(album: dict[str, str | int]) -> None:
@@ -68,12 +65,13 @@ def filter_albums(term: str) -> list[dict[str, str | int]]:
         ]
 
 
-def remove_album_by_name(name: str) -> bool:
+def remove_album_by_name(name: str, artist: str) -> bool:
     with db_connection() as conn:
         cursor = conn.cursor()
 
         cursor.execute(
-            "SELECT COUNT(*) FROM albums WHERE lower(nome) = ?", (name.lower(),)
+            "SELECT COUNT(*) FROM albums WHERE lower(nome) = ? AND lower(artista) = ?",
+            (name.lower(), artist.lower()),
         )
         count = cursor.fetchone()[0]
 
@@ -81,9 +79,35 @@ def remove_album_by_name(name: str) -> bool:
             conn.close()
             return False
 
-        cursor.execute("DELETE FROM albums WHERE lower(nome) = ?", (name.lower(),))
+        cursor.execute(
+            "DELETE FROM albums WHERE lower(nome) = ? AND lower(artista) = ?",
+            (name.lower(), artist.lower()),
+        )
         conn.commit()
         return True
+
+
+def update_album_favorite(name: str, artist: str, favorite: bool) -> bool:
+    with db_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute(
+            "UPDATE albums SET favorito = ? WHERE lower(nome) = ? AND lower(artista) = ?",
+            (int(favorite), name.lower(), artist.lower()),
+        )
+        conn.commit()
+        return cursor.rowcount > 0
+
+
+def list_favorites() -> list[dict[str, str | int]]:
+    with db_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute(
+            "SELECT nome, artista, genero, ano FROM albums WHERE favorito = 1"
+        )
+        rows = cursor.fetchall()
+        return [
+            {"nome": r[0], "artista": r[1], "genero": r[2], "ano": r[3]} for r in rows
+        ]
 
 
 def display_albums(albums: list[dict[str, str | int]]) -> None:
