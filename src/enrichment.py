@@ -27,23 +27,24 @@ def add_columns_to_table() -> None:
         conn.commit()
 
 
-def enrich_album_data(album_name: str) -> None:
+def enrich_album_data(name: str, artist: str) -> None:
     """Busca um álbum por nome e atualiza dados via Spotify API."""
 
     with db_connection() as conn:
         cursor = conn.cursor()
         cursor.execute(
-            "SELECT id FROM albums WHERE lower(nome) = ?", (album_name.lower(),)
+            "SELECT id FROM albums WHERE lower(nome) = ? AND lower(artista) = ?",
+            (name.lower(), artist.lower()),
         )
         result = cursor.fetchone()
 
         if not result:
-            print(f"❌ Álbum '{album_name}' não encontrado na base de dados.")
+            print(f"❌ Álbum '{name}' de {artist} não encontrado na base de dados.")
             return
 
         album_id = result[0]
-        print(f"🔍 Buscando informações no Spotify para: {album_name}")
-        spotify_data = search_album_by_name(album_name)
+        print(f"🔍 Buscando informações no Spotify para: {name} de {artist}")
+        spotify_data = search_album_by_name(name)
 
         if not spotify_data:
             print(f"⚠️ Nenhuma informação encontrada na API.")
@@ -67,4 +68,4 @@ def enrich_album_data(album_name: str) -> None:
         for k, v in spotify_data.items():
             print(f"  {k.capitalize()}: {v}")
         conn.commit()
-        print(f"✅ Dados do álbum '{album_name}' atualizados com sucesso.")
+        print(f"✅ Dados do álbum '{name}' atualizados com sucesso.")

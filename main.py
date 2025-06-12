@@ -24,12 +24,11 @@ def show_menu():
 
 def handle_add_album():
     name = input("Nome do álbum: ").strip().title()
-
-    if album_exists(name):
-        print("⚠️ Álbum já cadastrado.")
-        return
-
     artist = input("Artista: ").strip().title()
+
+    if album_exists(name, artist):
+        print("⚠️ Álbum já cadastrado para esse artista.")
+        return
     genre = input("Gênero: ").strip().title()
 
     while True:
@@ -88,12 +87,13 @@ def handle_remove_album():
 
 
 def handle_enrich_album():
-    album_name = input("Digite o nome do álbum que deseja enriquecer: ").strip().title()
-    if album_name:
+    name = input("Nome do álbum: ").strip().title()
+    artist = input("Artista: ").strip().title()
+    if name and artist:
         add_columns_to_table()
-        enrich_album_data(album_name)
+        enrich_album_data(name, artist)
     else:
-        print("⚠️ Nome do álbum não pode ser vazio.")
+        print("⚠️ Nome do álbum e artista não podem ser vazios.")
 
 
 def main():
