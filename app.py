@@ -1,12 +1,16 @@
 import pandas as pd
 import streamlit as st
+from dotenv import load_dotenv
 
+from src.spotify_client import search_album_by_name
 from src.sql_analysis import (
     albums_by_artist,
     albums_by_decade,
     albums_by_decade_range,
     albums_by_genre,
 )
+
+load_dotenv()
 
 st.title("🎵 Análise de Álbuns Musicais")
 
@@ -33,3 +37,11 @@ if start <= end:
     st.dataframe(df_range)
 else:
     st.warning("O ano final deve ser maior ou igual ao ano inicial.")
+
+album_sp = search_album_by_name("Killers")
+
+if album_sp:
+    st.image(album_sp["imagem"], width=250)
+    st.markdown(
+        f"[Ouvir no Spotify]({album_sp['spotify_url']})", unsafe_allow_html=True
+    )
