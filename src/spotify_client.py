@@ -1,6 +1,7 @@
 import os
 
 import spotipy
+import streamlit as st
 from dotenv import load_dotenv
 from spotipy.oauth2 import SpotifyClientCredentials
 
@@ -21,6 +22,7 @@ auth_manager = SpotifyClientCredentials(
 sp = spotipy.Spotify(auth_manager=auth_manager)
 
 
+@st.cache_data(show_spinner=False)
 def search_album_by_name(album_name: str) -> dict:
     result = sp.search(q=album_name, type="album", limit=1)
 

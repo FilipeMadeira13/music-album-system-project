@@ -38,10 +38,22 @@ if start <= end:
 else:
     st.warning("O ano final deve ser maior ou igual ao ano inicial.")
 
-album_sp = search_album_by_name("Killers")
+st.subheader("🔍 Buscar Álbum no Spotify")
 
-if album_sp:
-    st.image(album_sp["imagem"], width=250)
-    st.markdown(
-        f"[Ouvir no Spotify]({album_sp['spotify_url']})", unsafe_allow_html=True
-    )
+album_name = st.text_input("Digite o nome do álbum: ").title().strip()
+
+if album_name:
+    album_sp = search_album_by_name(album_name)
+
+    if album_sp:
+        st.image(album_sp["imagem"], width=250)
+        st.markdown(
+            f"[Ouvir no Spotify]({album_sp['spotify_url']})", unsafe_allow_html=True
+        )
+
+        st.markdown(f"**Artista**: {album_sp['artista']}")
+        st.markdown(f"**Data de Lançamento**: {album_sp['lancamento']}")
+        st.markdown(f"**Total de Faixas**: {album_sp['total_faixas']}")
+        st.markdown(f"**Popularidade**: {album_sp['popularidade']}")
+    else:
+        st.warning("Nenhum resultado encontado para esse álbum.")
