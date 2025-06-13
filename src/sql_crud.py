@@ -1,3 +1,5 @@
+import random
+
 from src.db_manager import db_connection
 
 
@@ -23,7 +25,7 @@ def list_albums(
     with db_connection() as conn:
         cursor = conn.cursor()
 
-        query = "SELECT nome, artista, genero, ano FROM albums"
+        query = "SELECT nome, artista, genero, ano, favorito FROM albums"
         order_clauses = []
 
         if order_name:
@@ -40,7 +42,14 @@ def list_albums(
         rows = cursor.fetchall()
 
         return [
-            {"nome": r[0], "artista": r[1], "genero": r[2], "ano": r[3]} for r in rows
+            {
+                "nome": r[0],
+                "artista": r[1],
+                "genero": r[2],
+                "ano": r[3],
+                "favorito": r[4],
+            }
+            for r in rows
         ]
 
 
@@ -49,7 +58,7 @@ def filter_albums(term: str) -> list[dict[str, str | int]]:
         cursor = conn.cursor()
 
         query = """
-        SELECT nome, artista, genero, ano FROM albums
+        SELECT nome, artista, genero, ano, favorito FROM albums
         WHERE lower(nome) LIKE ?
         OR lower(artista) LIKE ?
         OR lower(genero) LIKE ?
@@ -61,7 +70,14 @@ def filter_albums(term: str) -> list[dict[str, str | int]]:
         rows = cursor.fetchall()
 
         return [
-            {"nome": r[0], "artista": r[1], "genero": r[2], "ano": r[3]} for r in rows
+            {
+                "nome": r[0],
+                "artista": r[1],
+                "genero": r[2],
+                "ano": r[3],
+                "favorito": r[4],
+            }
+            for r in rows
         ]
 
 
@@ -102,21 +118,54 @@ def list_favorites() -> list[dict[str, str | int]]:
     with db_connection() as conn:
         cursor = conn.cursor()
         cursor.execute(
-            "SELECT nome, artista, genero, ano FROM albums WHERE favorito = 1"
+            "SELECT nome, artista, genero, ano, favorito FROM albums WHERE favorito = 1"
         )
         rows = cursor.fetchall()
         return [
-            {"nome": r[0], "artista": r[1], "genero": r[2], "ano": r[3]} for r in rows
+            {
+                "nome": r[0],
+                "artista": r[1],
+                "genero": r[2],
+                "ano": r[3],
+                "favorito": r[4],
+            }
+            for r in rows
         ]
+
+
+def get_random_album(favorites_only=False) -> dict[str, str | int] | None:
+    with db_connection() as conn:
+        cursor = conn.cursor()
+        if favorites_only:
+            cursor.execute(
+                "SELECT nome, artista, genero, ano, favorito FROM albums WHERE favorito = 1"
+            )
+        else:
+            cursor.execute("SELECT nome, artista, genero, ano, favorito FROM albums")
+        rows = cursor.fetchall()
+        if not rows:
+            return None
+
+        chosen = random.choice(rows)
+        return {
+            "nome": chosen[0],
+            "artista": chosen[1],
+            "genero": chosen[2],
+            "ano": chosen[3],
+        }
 
 
 def display_albums(albums: list[dict[str, str | int]]) -> None:
     print("\n🎶 Suas álbuns são:")
     print("-" * 70)
 
-    for i, music in enumerate(albums, start=1):
+    for i, album in enumerate(albums, start=1):
+        if "favorito" in album and album["favorito"] == 1:
+            print(f"⭐️ {i}. ", end="")
+        else:
+            print(f"{i}. ", end="")
         print(
-            f"{i}. Nome: {music['nome']:<20} | Artista: {music['artista']:<20} | Gênero: {music['genero']:<15} | Ano: {music['ano']}"
+            f"🎵 {album['nome']} - 🎤 {album['artista']} - 🎧 {album['genero']} - 📅 {album['ano']}"
         )
 
     print("-" * 70)

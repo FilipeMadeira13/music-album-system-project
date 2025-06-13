@@ -17,7 +17,8 @@ def show_menu():
     5 - Analisar dados
     6 - Atualizar álbum com dados do Spotify
     7 - Marcar álbum como favorito
-    8 - Sair
+    8 - Sortear álbum aleatório
+    9 - Sair
 """
     )
     return input("Escolha o número da opção acima: ").strip()
@@ -51,10 +52,16 @@ def handle_add_album():
 
 
 def handle_list_albums():
-    order_name = input("Deseja ordenar por nome? (s/n): ").strip().lower() == "s"
-    order_artist = input("Deseja ordenar por artista? (s/n): ").strip().lower() == "s"
-    order_year = input("Deseja ordenar por ano? (s/n): ").strip().lower() == "s"
-    albums = sc.list_albums(order_name, order_artist, order_year)
+    only_favs = input("Listar apenas álbuns favoritos? (s/n): ").strip().lower() == "s"
+    if only_favs:
+        albums = sc.list_favorites()
+    else:
+        print("Ordenar por:")
+        order_name = input("Nome? (s/n): ").strip().lower() == "s"
+        order_artist = input("Artista? (s/n): ").strip().lower() == "s"
+        order_year = input("Ano? (s/n): ").strip().lower() == "s"
+
+        albums = sc.list_albums(order_name, order_artist, order_year)
     if albums:
         sc.display_albums(albums)
     else:
@@ -115,6 +122,25 @@ def handle_toggle_favorite():
         print("❌ Álbum não encontrado ou não atualizado.")
 
 
+def handle_random_album():
+    only_favs = (
+        input("Escolher aleatóriamente apenas álbuns favoritos? (s/n): ")
+        .strip()
+        .lower()
+        == "s"
+    )
+    album = sc.get_random_album(favorites_only=only_favs)
+
+    if album:
+        print("\n🎲 Álbum sorteado:")
+        print(f"🎵 Nome: {album['nome']}")
+        print(f"🎤 Artista: {album['artista']}")
+        print(f"🎧 Gênero: {album['genero']}")
+        print(f"📅 Ano: {album['ano']}")
+    else:
+        print("❌ Nenhum álbum encontrado para sortear.")
+
+
 def main():
 
     while True:
@@ -135,6 +161,8 @@ def main():
         elif option == "7":
             handle_toggle_favorite()
         elif option == "8":
+            handle_random_album()
+        elif option == "9":
             print("🎼 Você saiu do sistema de músicas.")
             break
         else:
