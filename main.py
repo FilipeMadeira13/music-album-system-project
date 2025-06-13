@@ -19,7 +19,8 @@ def show_menu():
     6 - Atualizar álbum com dados do Spotify
     7 - Marcar álbum como favorito
     8 - Sortear álbum aleatório
-    9 - Sair
+    9 - Editar álbum
+    10 - Sair
 """
     )
     return input("Escolha o número da opção acima: ").strip()
@@ -157,6 +158,53 @@ def handle_random_album():
         print("❌ Nenhum álbum encontrado para sortear.")
 
 
+def handle_edit_album():
+    print("🔧 Editar álbum")
+    name = input("Nome do álbum: ").strip().title()
+    artist = input("Artista: ").strip().title()
+
+    if not album_exists(name, artist):
+        print("❌ Álbum não encontrado.")
+        return
+
+    new_name = (
+        input("Novo nome do álbum (deixe em branco para não alterar): ").strip().title()
+    )
+    new_artist = (
+        input("Novo artista (deixe em branco para não alterar): ").strip().title()
+    )
+    new_genre = (
+        input("Novo gênero (deixe em branco para não alterar): ").strip().title()
+    )
+
+    new_year_input = input("Novo ano (deixe em branco para não alterar): ").strip()
+    new_year = None
+
+    if new_year_input:
+        try:
+            new_year = int(new_year_input)
+            if not validate_year(new_year):
+                print("⚠️ Ano inválido.")
+                return
+        except ValueError:
+            print("⚠️ Ano deve ser um número válido.")
+            return
+
+    updated = sc.edit_album(
+        current_name=name,
+        current_artist=artist,
+        new_name=new_name if new_name else None,
+        new_artist=new_artist if new_artist else None,
+        new_genre=new_genre if new_genre else None,
+        new_year=new_year,
+    )
+
+    if updated:
+        print("✅ Álbum atualizado com sucesso.")
+    else:
+        print("❌ Não foi possível atualizar o álbum. Verifique os dados informados.")
+
+
 def main():
 
     while True:
@@ -179,6 +227,8 @@ def main():
         elif option == "8":
             handle_random_album()
         elif option == "9":
+            handle_edit_album()
+        elif option == "10":
             print("🎼 Você saiu do sistema de músicas.")
             break
         else:

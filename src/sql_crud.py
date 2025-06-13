@@ -156,6 +156,49 @@ def get_random_album(favorites_only=False) -> dict[str, str | int] | None:
         }
 
 
+def edit_album(
+    current_name: str,
+    current_artist: str,
+    new_name: str | None,
+    new_artist: str | None,
+    new_genre: str | None,
+    new_year: int | None,
+) -> bool:
+    with db_connection() as conn:
+        cursor = conn.cursor()
+
+        updates = []
+        params = []
+
+        if new_name:
+            updates.append("nome = ?")
+            params.append(new_name)
+        if new_artist:
+            updates.append("artista = ?")
+            params.append(new_artist)
+        if new_genre:
+            updates.append("genero = ?")
+            params.append(new_genre)
+        if new_year:
+            updates.append("ano = ?")
+            params.append(new_year)
+
+        if not updates:
+            print("⚠️ Nenhum campo para atualizar.")
+            return False
+
+        params.extend([current_name.lower(), current_artist.lower()])
+        query = f"""
+        UPDATE albums
+        SET {', '.join(updates)}
+        WHERE lower(nome) = ? AND lower(artista) = ?
+        """
+
+        cursor.execute(query, params)
+        conn.commit()
+        return cursor.rowcount > 0
+
+
 def display_albums(albums: list[dict[str, str | int]]) -> None:
     print("\n🎶 Suas álbuns são:")
     print("-" * 70)

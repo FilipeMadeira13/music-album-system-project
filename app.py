@@ -11,6 +11,12 @@ from src.sql_analysis import (
 
 load_dotenv()
 
+
+@st.cache_data
+def cached_search_album_from_spotify(album_name: str, artist_name: str) -> dict:
+    return search_album_from_spotify(album_name, artist_name)
+
+
 st.title("🎵 Análise de Álbuns Musicais")
 
 st.subheader("🔍 Buscar Álbum no Spotify")
@@ -19,7 +25,7 @@ album_name = st.text_input("Digite o nome do álbum: ").title().strip()
 artist = st.text_input("Digite o nome do artista: ").title().strip()
 
 if album_name and artist:
-    album_sp = search_album_from_spotify(album_name, artist)
+    album_sp = cached_search_album_from_spotify(album_name, artist)
 
     if album_sp:
         st.image(album_sp["imagem"], width=250)
