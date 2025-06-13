@@ -1,11 +1,7 @@
 import pandas as pd
 
-from src.sql_analysis import (
-    albums_by_artist,
-    albums_by_decade,
-    albums_by_genre,
-    load_dataframe,
-)
+from src.sql_analysis import (albums_by_artist, albums_by_decade,
+                              albums_by_genre, load_dataframe)
 
 
 def load_data_to_dataframe() -> pd.DataFrame:
