@@ -1,6 +1,7 @@
 import src.analysis as analysis
 import src.sql_crud as sc
 from src.enrichment import add_columns_to_table, enrich_album_data
+from src.spotify_client import search_album_from_spotify
 from src.utils.utils import album_exists, validate_year
 
 
@@ -10,7 +11,7 @@ def show_menu():
     print("=" * 50)
     print(
         """
-    1 - Adicionar álbum
+    1 - Adicionar álbum (Via Spotify)
     2 - Listar álbuns
     3 - Filtrar álbuns
     4 - Remover álbum
@@ -24,31 +25,46 @@ def show_menu():
     return input("Escolha o número da opção acima: ").strip()
 
 
-def handle_add_album():
+def handle_add_album_from_spotify():
     name = input("Nome do álbum: ").strip().title()
     artist = input("Artista: ").strip().title()
 
     if album_exists(name, artist):
-        print("⚠️ Álbum já cadastrado para esse artista.")
+        print("⚠️ Álbum já cadastrado.")
         return
-    genre = input("Gênero: ").strip().title()
 
-    while True:
-        try:
-            year = int(input("Ano de lançamento: ").strip())
+    print("🔍 Buscando informações do álbum no Spotify...")
+    data = search_album_from_spotify(name, artist)
 
-            if validate_year(year):
-                break
-            else:
-                print("⚠️ Ano fora do intervalo esperado.")
+    if not data:
+        print("❌ Álbum não encontrado no Spotify.")
+        return
 
-        except ValueError:
-            print("⚠️ Ano inválido. Digite um número inteiro.")
+    print("🎶 Álbum encontrado:")
+    print(f"🎵 Nome: {data['nome']}")
+    print(f"🎤 Artista: {data['artista']}")
+    print(f"📅 Lançamento: {data['lancamento']}")
+    print(f"🎼 Total de Faixas: {data['total_faixas']}")
+    print(f"📈 Popularidade: {data['popularidade']}")
+    print(f"🔗 Spotify: {data['spotify_url']}")
 
-    if name and artist and genre:
-        sc.add_album({"nome": name, "artista": artist, "genero": genre, "ano": year})
+    confirm = (
+        input("Deseja adicionar este álbum ao sistema? (s/n): ").strip().lower() == "s"
+    )
+
+    if confirm:
+        year = int(data["lancamento"].split("-")[0])
+        sc.add_album(
+            {
+                "nome": data["nome"],
+                "artista": data["artista"],
+                "genero": data.get("genero", "Desconhecido"),
+                "ano": year,
+                "spotify_url": data["spotify_url"],
+            }
+        )
     else:
-        print("⚠️ Existem campos que não foram digitados. Por favor, tente novamente.")
+        print("❌ Cadastro cancelado.")
 
 
 def handle_list_albums():
@@ -147,7 +163,7 @@ def main():
         option = show_menu()
 
         if option == "1":
-            handle_add_album()
+            handle_add_album_from_spotify()
         elif option == "2":
             handle_list_albums()
         elif option == "3":

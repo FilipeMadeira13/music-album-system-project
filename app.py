@@ -1,7 +1,7 @@
 import streamlit as st
 from dotenv import load_dotenv
 
-from src.spotify_client import search_album_by_name
+from src.spotify_client import search_album_from_spotify
 from src.sql_analysis import (
     albums_by_artist,
     albums_by_decade,
@@ -19,7 +19,7 @@ album_name = st.text_input("Digite o nome do álbum: ").title().strip()
 artist = st.text_input("Digite o nome do artista: ").title().strip()
 
 if album_name and artist:
-    album_sp = search_album_by_name(album_name, artist)
+    album_sp = search_album_from_spotify(album_name, artist)
 
     if album_sp:
         st.image(album_sp["imagem"], width=250)

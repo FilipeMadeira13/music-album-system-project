@@ -23,15 +23,14 @@ sp = spotipy.Spotify(auth_manager=auth_manager)
 
 
 @st.cache_data(show_spinner=False)
-def search_album_by_name(album_name: str, artist_name: str) -> dict:
+def search_album_from_spotify(album_name: str, artist_name: str) -> dict:
     query = f"album:{album_name} artist:{artist_name}"
     result = sp.search(q=query, type="album", limit=1)
 
     if result["albums"]["items"]:
         album = result["albums"]["items"][0]
-        album_id = album["id"]
 
-        full_album = sp.album(album_id)
+        full_album = sp.album(album["id"])
 
         return {
             "nome": full_album["name"],

@@ -152,6 +152,7 @@ def get_random_album(favorites_only=False) -> dict[str, str | int] | None:
             "artista": chosen[1],
             "genero": chosen[2],
             "ano": chosen[3],
+            "favorito": chosen[4],
         }
 
 

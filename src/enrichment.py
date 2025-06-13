@@ -1,7 +1,7 @@
 import sqlite3
 
 from src.db_manager import DB_PATH, db_connection
-from src.spotify_client import search_album_by_name
+from src.spotify_client import search_album_from_spotify
 
 
 def add_columns_to_table() -> None:
@@ -44,7 +44,7 @@ def enrich_album_data(name: str, artist: str) -> None:
 
         album_id = result[0]
         print(f"🔍 Buscando informações no Spotify para: {name} de {artist}")
-        spotify_data = search_album_by_name(name, artist)
+        spotify_data = search_album_from_spotify(name, artist)
 
         if not spotify_data:
             print(f"⚠️ Nenhuma informação encontrada na API.")
