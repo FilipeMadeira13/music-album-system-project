@@ -23,6 +23,7 @@ dependencies = [
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.0.0"
+pytest-cov = "^5.0.0"
 
 
 [tool.isort]
