@@ -51,17 +51,49 @@ def test_add_and_list_album():
     assert len(result) == 1
 
 
-def test_add_album():
-    pass
-
-
 def test_remove_album_by_name():
-    pass
+    sql_crud.add_album(
+        {
+            "nome": "Album to Remove",
+            "artista": "Artist",
+            "genero": "Genre",
+            "ano": 2023,
+        }
+    )
+    removed = sql_crud.remove_album_by_name("Album to Remove", "Artist")
+    albums = sql_crud.list_albums()
+
+    assert removed is True
+    assert all(a["nome"] != "Album to Remove" for a in albums)
 
 
 def test_get_random_album():
-    pass
+    sql_crud.add_album(
+        {
+            "nome": "Random Album",
+            "artista": "Random Artist",
+            "genero": "Random Genre",
+            "ano": 2023,
+        }
+    )
+    album = sql_crud.get_random_album()
+
+    assert album is not None
+    assert album["nome"] == "Random Album"
 
 
 def test_update_album_favorite():
-    pass
+    sql_crud.add_album(
+        {
+            "nome": "Album to Update",
+            "artista": "Artist",
+            "genero": "Genre",
+            "ano": 2023,
+        }
+    )
+    updated = sql_crud.update_album_favorite("Album to Update", "Artist", True)
+    favs = sql_crud.list_favorites()
+
+    assert updated is True
+    assert len(favs) == 1
+    assert favs[0]["favorito"] == 1
