@@ -1,6 +1,6 @@
 import sqlite3
 
-from src.db_manager import DB_PATH, db_connection
+from src.db_manager import db_connection
 from src.spotify_client import search_album_from_spotify
 
 

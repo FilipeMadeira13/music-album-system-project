@@ -1,7 +1,7 @@
 import os
 import sqlite3
 
-from src.db_manager import DB_PATH, db_connection
+from src.db_manager import db_connection, get_db_path
 from src.enrichment import add_columns_to_table
 
 
@@ -29,12 +29,6 @@ def test_add_columns_to_table(tmp_path):
         )
         conn.commit()
 
-        # Aponta o contexto do DB para o banco de teste
-        original_db_path = DB_PATH
-        from src import db_manager
-
-        db_manager.DB_PATH = str(test_db)
-
         # Executa a função a ser testada
         add_columns_to_table()
 
@@ -47,5 +41,3 @@ def test_add_columns_to_table(tmp_path):
         assert "popularidade" in columns
         assert "total_faixas" in columns
         assert "spotify_url" in columns
-
-        db_manager.DB_PATH = original_db_path  # Restaura o caminho original do DB_PATH

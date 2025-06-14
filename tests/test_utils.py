@@ -3,7 +3,6 @@ import sqlite3
 
 import pytest
 
-from src.db_manager import DB_PATH
 from src.utils.utils import album_exists, validate_year
 
 TEST_DB_PATH = "test_albums.db"
@@ -11,7 +10,7 @@ TEST_DB_PATH = "test_albums.db"
 
 @pytest.fixture(autouse=True)
 def setup_test_db(monkeypatch):
-    monkeypatch.setattr("src.db_manager.DB_PATH", TEST_DB_PATH)
+    monkeypatch.setenv("DB_PATH", TEST_DB_PATH)
 
     conn = sqlite3.connect(TEST_DB_PATH)
     cursor = conn.cursor()
@@ -36,7 +35,9 @@ def setup_test_db(monkeypatch):
     conn.commit()
     yield
     conn.close()
-    os.remove(TEST_DB_PATH)
+
+    if os.path.exists(TEST_DB_PATH):
+        os.remove(TEST_DB_PATH)
 
 
 def test_album_exists_found():

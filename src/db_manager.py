@@ -2,9 +2,14 @@ import os
 import sqlite3
 from contextlib import contextmanager
 
-DB_PATH = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), "..", "data", "albums.db")
-)
+
+def get_db_path():
+    return os.getenv(
+        "DB_PATH",
+        os.path.abspath(
+            os.path.join(os.path.dirname(__file__), "..", "data", "albums.db")
+        ),
+    )
 
 
 def create_table() -> None:
@@ -44,7 +49,7 @@ def add_favorito_column() -> None:
 
 @contextmanager
 def db_connection():
-    conn = sqlite3.connect(DB_PATH)
+    conn = sqlite3.connect(get_db_path())
     try:
         yield conn
     finally:

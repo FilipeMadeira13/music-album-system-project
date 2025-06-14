@@ -4,15 +4,13 @@ import sqlite3
 import pytest
 
 from src import sql_crud
-from src.db_manager import DB_PATH
 
 TEST_DB_PATH = "test_albums.db"
 
 
 @pytest.fixture(autouse=True)
 def setup_test_db(monkeypatch):
-    # Use banco isolado
-    monkeypatch.setattr("src.db_manager.DB_PATH", TEST_DB_PATH)
+    monkeypatch.setenv("DB_PATH", TEST_DB_PATH)
 
     # Cria tabela antes do teste
     conn = sqlite3.connect(TEST_DB_PATH)
@@ -32,7 +30,9 @@ def setup_test_db(monkeypatch):
     conn.commit()
     yield
     conn.close()
-    os.remove(TEST_DB_PATH)
+    # Remove o banco de dados após o teste
+    if os.path.exists(TEST_DB_PATH):
+        os.remove(TEST_DB_PATH)
 
 
 def test_add_and_list_album():

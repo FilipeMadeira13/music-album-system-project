@@ -1,8 +1,6 @@
-import sqlite3
-
 import pandas as pd
 
-from src.db_manager import DB_PATH, db_connection
+from src.db_manager import db_connection
 
 
 def load_dataframe() -> pd.DataFrame:
