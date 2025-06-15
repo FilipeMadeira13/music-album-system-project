@@ -88,6 +88,68 @@ def test_handle_list_albums_with_order(mock_input, mock_list, mock_display):
     mock_display.assert_called_once()
 
 
+@patch("src.sql_crud.remove_album_by_name", return_value=True)
+@patch("builtins.input", side_effect=["Album Teste", "Artista Teste", "s"])
+def test_handle_remove_album_success(mock_input, mock_remove, capsys):
+    handlers.handle_remove_album()
+
+    captured = capsys.readouterr()
+    assert "✅ Álbum excluído com sucesso." in captured.out
+
+
+@patch("src.sql_crud.remove_album_by_name", return_value=False)
+@patch("builtins.input", side_effect=["Album Inexistente", "Artista Inexistente", "s"])
+def test_handle_remove_album_not_found(mock_input, mock_remove, capsys):
+    handlers.handle_remove_album()
+
+    captured = capsys.readouterr()
+    assert "❌ Álbum não encontrado!" in captured.out
+
+
+@patch("builtins.input", side_effect=["Album Teste", "Artista Teste", "n"])
+def test_handle_remove_album_cancelled(mock_input, capsys):
+    handlers.handle_remove_album()
+
+    captured = capsys.readouterr()
+    assert "❌ Exclusão de álbum cancelada!" in captured.out
+
+
+@patch("builtins.input", side_effect=["", ""])
+def test_handle_remove_album_empty_fields(mock_input, capsys):
+    handlers.handle_remove_album()
+
+    captured = capsys.readouterr()
+    assert "⚠️ Nome do álbum e artista não podem ser vazios." in captured.out
+
+
+@patch(
+    "src.sql_crud.filter_albums",
+    return_value=[
+        {
+            "nome": "Álbum X",
+            "artista": "Artista Y",
+            "genero": "Rock",
+            "ano": 2022,
+            "favorito": 0,
+        }
+    ],
+)
+@patch("src.sql_crud.display_albums")
+@patch("builtins.input", return_value="rock")
+def test_handle_filter_albums_found(mock_input, mock_display, mock_filter, capsys):
+    handlers.handle_filter_albums()
+    mock_display.assert_called_once()
+    mock_filter.assert_called_once_with("rock")
+
+
+@patch("src.sql_crud.filter_albums", return_value=[])
+@patch("builtins.input", return_value="rock")
+def test_handle_filter_albums_not_found(mock_input, mock_filter, capsys):
+    handlers.handle_filter_albums()
+    captured = capsys.readouterr()
+    assert "❌ Nenhum álbum foi encontrado." in captured.out
+
+
 def test_handle_toggle_favorite_album_updated(capsys):
     # Adiciona um álbum de teste
     sql_crud.add_album(
