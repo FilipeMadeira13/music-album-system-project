@@ -45,6 +45,49 @@ def test_handle_add_album_from_spotify_success(
     assert "✅" not in captured.out
 
 
+@patch("src.sql_crud.display_albums")
+@patch("src.sql_crud.list_favorites")
+@patch("builtins.input", side_effect=["s"])
+def test_handle_list_albums_favorites(mock_input, mock_list_fav, mock_display):
+    mock_list_fav.return_value = [
+        {
+            "nome": "Album Favorito",
+            "artista": "Artista Favorito",
+            "genero": "Rock",
+            "ano": 2020,
+            "favorito": 1,
+        }
+    ]
+
+    from src.handlers import handle_list_albums
+
+    handle_list_albums()
+
+    mock_list_fav.assert_called_once()
+    mock_display.assert_called_once()
+
+
+@patch("src.sql_crud.display_albums")
+@patch("src.sql_crud.list_albums")
+@patch("builtins.input", side_effect=["n", "s", "n", "s"])
+def test_handle_list_albums_with_order(mock_input, mock_list, mock_display):
+    mock_list.return_value = [
+        {
+            "nome": "Album Teste",
+            "artista": "Artista Teste",
+            "genero": "Rock",
+            "ano": 2023,
+            "favorito": 0,
+        }
+    ]
+
+    from src.handlers import handle_list_albums
+
+    handle_list_albums()
+    mock_list.assert_called_once_with(True, False, True)
+    mock_display.assert_called_once()
+
+
 def test_handle_toggle_favorite_album_updated(capsys):
     # Adiciona um álbum de teste
     sql_crud.add_album(
