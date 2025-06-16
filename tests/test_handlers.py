@@ -3,6 +3,7 @@ from unittest.mock import patch
 
 import pytest
 
+import src.handlers  # noqa: E402
 from src import handlers, sql_crud
 
 
