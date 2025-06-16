@@ -1,55 +1,23 @@
 # 🎵 Music Album System Project
 
-Sistema completo de análise de álbuns musicais com SQLite, Streamlit e integração com a API do Spotify.
+Sistema completo de gerenciamento e análise de álbuns musicais com SQLite, Streamlit e Spotify API.
 
----
+## 📦 Funcionalidades
 
-## 📊 Visão Geral
+- Buscar e cadastrar álbuns diretamente do Spotify
+- Marcar como favorito ⭐
+- Filtrar, ordenar, remover e editar álbuns
+- Sortear álbum aleatório
+- Análises e gráficos com Pandas e Plotly
+- Dashboard com Streamlit
+- Testes automatizados com Pytest + cobertura com pytest-cov
 
-Este projeto permite:
-
-- Cadastro e gerenciamento de álbuns (nome, artista, gênero, ano)
-- Armazenamento em banco de dados SQLite
-- Análises e visualizações por gênero, artista, ano e década
-- Integração com a API do Spotify para enriquecer os dados
-- Interface interativa via terminal e dashboard com Streamlit
-
----
-
-## 🌐 Tecnologias Utilizadas
-
-- Python 3.11+
-- SQLite3
-- Streamlit
-- Spotipy (API Spotify)
-- Pandas
-- Plotly
-- dotenv
-
----
-
-## ⚖️ Funcionalidades
-
-### Terminal (main.py)
-
-- [x] Adicionar, listar, remover e filtrar álbuns
-- [x] Atualizar um álbum com dados reais da API do Spotify
-- [x] Validar duplicidade por nome **e artista**
-
-### Dashboard (app.py)
-
-- [x] Gráficos por gênero, artista e década
-- [x] Filtro interativo por intervalo de anos
-- [x] Busca de álbuns com imagem e link direto para o Spotify
-
----
-
-## ⚖️ Como Usar o Projeto
+## 🚀 Como Executar
 
 ### 1. Clone o repositório
 
 ```bash
-git clone https://github.com/seu-usuario/music-album-system-project.git
+git clone https://github.com/FilipeMadeira13/music-album-system-project.git
 cd music-album-system-project
 ```
 
@@ -61,55 +29,71 @@ poetry install --no-root
 
 ### 3. Configure as variáveis de ambiente
 
-Crie um arquivo `.env` com:
+Crie um arquivo .env com:
 
 ```env
-SPOTIPY_CLIENT_ID=xxxxxx
-SPOTIPY_CLIENT_SECRET=yyyyyy
+SPOTIPY_CLIENT_ID=your_spotify_client_id
+SPOTIPY_CLIENT_SECRET=your_spotify_client_secret
 ```
 
-### 4. Execute o terminal
+Você pode obter essas credenciais em [developer.spotify.com](https://developer.spotify.com).
+
+### 4. Execute o sistema via terminal
 
 ```bash
 python main.py
 ```
 
-### 5. Rode o dashboard Streamlit
+### 5. Execute o dashboard com Streamlit
 
 ```bash
 streamlit run app.py
 ```
 
----
+## 🧪 Testes
 
-## 📈 Exemplo de Análise no Dashboard
+![coverage](https://img.shields.io/badge/Coverage-61%25-yellow)
 
-![dashboard_genero](img/plot_genero.png)
-![dashboard_decada](img/plot_decada.png)
-![dashboard_spotify](img/exemplo_album_spotify.png)
+Execute os testes com cobertura:
 
----
+```bash
+poetry run pytest --cov=src --cov-report=term-missing
 
-## 🚀 Roadmap Futuro
+```
 
-- [ ] Marcar álbuns favoritos
-- [ ] Exportar relatórios em CSV
-- [ ] Adicionar playlist automática com base nos álbuns favoritos
+## 📊 Exemplos de Gráficos
 
----
+**Álbuns por Gênero**  
+![Álbuns por gênero](img/plot_genero.png)
 
-## 🎓 Autor
+**Álbuns por Década**  
+![Álbuns por década](img/plot_decada.png)
 
-**Filipe Madeira**
+**Álbuns por Artista**  
+![Álbuns por artista](img/plot_artista.png)
 
----
+**Exemplo de Álbum Buscado pelo Spotify**  
+![Exemplo de álbum](img/exemplo_album_spotify.png)
 
-## 🔗 Contribuições
+## 🛠️ Tecnologias Utilizadas
 
-Pull requests são bem-vindos. Para mudanças maiores, abra uma issue primeiro.
+- Python 3.11+
+- SQLite
+- Spotipy
+- Streamlit
+- Pandas
+- Plotly
+- Pytest + Coverage
+- Pre-commit (black, isort)
 
----
+## 👨‍💻 Autor
 
-## ✅ Licença
+Filipe Madeira
 
-Este projeto está licenciado sob a MIT License.
+- 📧 <a href="mailto:cfilipemadeira@gmail.com">cfilipemadeira@gmail.com</a>
+- 🔗 [GitHub](https://github.com/FilipeMadeira13)
+- 🔗 [LinkedIn](https://www.linkedin.com/in/carlos-filipe-madeira-de-souza-16211922a/)
+
+## 📜 Licença
+
+Este projeto está licenciado sob a [MIT License](https://opensource.org/licenses/MIT).
