@@ -151,6 +151,66 @@ def test_handle_filter_albums_not_found(mock_input, mock_filter, capsys):
     assert "❌ Nenhum álbum foi encontrado." in captured.out
 
 
+@patch(
+    "builtins.input",
+    side_effect=[
+        "Album Teste",
+        "Artista Teste",  # busca álbum existente
+        "Novo Álbum",
+        "Novo Artista",
+        "Novo Gênero",
+        "2022",  # novos valores
+    ],
+)
+@patch("src.handlers.album_exists", return_value=True)
+@patch("src.sql_crud.edit_album", return_value=True)
+def test_handle_edit_album_success(mock_edit, mock_exists, mock_input, capsys):
+    handlers.handle_edit_album()
+    captured = capsys.readouterr()
+    assert "✅ Álbum atualizado com sucesso." in captured.out
+    mock_edit.assert_called_once_with(
+        current_name="Album Teste",
+        current_artist="Artista Teste",
+        new_name="Novo Álbum",
+        new_artist="Novo Artista",
+        new_genre="Novo Gênero",
+        new_year=2022,
+    )
+
+
+@patch(
+    "builtins.input",
+    side_effect=["Album Teste", "Artista Teste", "", "", "", "3000"],  # ano inválido
+)
+@patch("src.handlers.album_exists", return_value=True)
+def test_handle_edit_album_invalid_year(mock_exists, mock_input, capsys):
+    handlers.handle_edit_album()
+    captured = capsys.readouterr()
+    assert "⚠️ Ano inválido." in captured.out
+
+
+@patch("builtins.input", return_value="s")
+@patch("src.sql_crud.get_random_album")
+def test_handle_random_album_found(mock_get, mock_input, capsys):
+    mock_get.return_value = {
+        "nome": "Álbum Aleatório",
+        "artista": "Artista Aleatório",
+        "genero": "Pop",
+        "ano": 2020,
+    }
+    handlers.handle_random_album()
+    captured = capsys.readouterr()
+    assert "🎲 Álbum sorteado:" in captured.out
+
+
+@patch("builtins.input", return_value="s")
+@patch("src.sql_crud.get_random_album", return_value=None)
+def test_handle_random_album_not_found(mock_get, mock_input, capsys):
+    handlers.handle_random_album()
+    captured = capsys.readouterr()
+    assert "❌ Nenhum álbum encontrado para sortear." in captured.out
+
+
 def test_handle_toggle_favorite_album_updated(capsys):
     # Adiciona um álbum de teste
     sql_crud.add_album(
